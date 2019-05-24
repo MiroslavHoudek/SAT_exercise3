@@ -2,12 +2,11 @@
 
 #include <iostream>
 
-
 namespace {
 
-const int rows = 9;
-const int columns = 9;
-const int values = 9;
+const int rows = 5;
+const int columns = 5;
+const int values = 5;
 
 Minisat::Var toVar(int row, int column, int value) {
     assert(row >= 0 && row < rows    && "Attempt to get var for nonexistant row");
@@ -104,16 +103,6 @@ void Solver::one_square_one_value() {
 }
 
 void Solver::non_duplicated_values() {
-    // In each row, for each value, forbid two column sharing that value
-    for (int row = 0; row < rows; ++row) {
-        for (int value = 0; value < values; ++value) {
-            Minisat::vec<Minisat::Lit> literals;
-            for (int column = 0; column < columns; ++column) {
-                literals.push(Minisat::mkLit(toVar(row, column, value)));
-            }
-            exactly_one_true(literals);
-        }
-    }
     // In each column, for each value, forbid two rows sharing that value
     for (int column = 0; column < columns; ++column) {
         for (int value = 0; value < values; ++value) {
@@ -122,20 +111,6 @@ void Solver::non_duplicated_values() {
                 literals.push(Minisat::mkLit(toVar(row, column, value)));
             }
             exactly_one_true(literals);
-        }
-    }
-    // Now forbid sharing in the 3x3 boxes
-    for (int r = 0; r < 9; r += 3) {
-        for (int c = 0; c < 9; c += 3) {
-            for (int value = 0; value < values; ++value) {
-                Minisat::vec<Minisat::Lit> literals;
-                for (int rr = 0; rr < 3; ++rr) {
-                    for (int cc = 0; cc < 3; ++cc) {
-                        literals.push(Minisat::mkLit(toVar(r + rr, c + cc, value)));
-                    }
-                }
-                exactly_one_true(literals);
-            }
         }
     }
 }
