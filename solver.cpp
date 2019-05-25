@@ -121,6 +121,9 @@ Solver::Solver(bool write_dimacs):
     init_variables();
     one_square_one_value();
     non_duplicated_values();
+
+    // Riddle rules application
+    NorwegianLivesInTheFirstHouse();
 }
 
 bool Solver::solve() {
@@ -143,4 +146,43 @@ board Solver::get_solution() const {
         }
     }
     return b;
+}
+
+bool Solver::NorwegianLivesInTheFirstHouse()
+{
+	bool ret = true;
+    // In the column of nationalities, constrain nationality of
+    // the inhabitant of the first house to Norwegian (it's actually
+    // Dane in this commit, because Norwegian ended up evaluated in the
+    // first house even in absence of any rules)
+    int col = Column::Nationality;
+	
+    for ( int row = House::House1; row <= House::House5; row++ )
+	{
+        for (int val = Nationality::Brit; val <= Nationality::Norwegian; val++)
+        {
+            if (row == House1)
+            {
+                if (val == Dane) {
+                    std::cout << "out " << col << " " << row << " " << val << std::endl;
+
+                    ret &= solver.addClause(Minisat::mkLit(toVar(row, col, val)));
+                }
+                else {
+                    ret &= solver.addClause(~Minisat::mkLit(toVar(row, col, val)));
+                }
+            }
+            else
+            {
+                if (val == Dane)
+                {
+                    ret &= solver.addClause(~Minisat::mkLit(toVar(row, col, val)));
+                }
+            }
+        }
+    }
+
+    std::cout << "ret" << ret << std::endl;
+	
+	return ret;
 }

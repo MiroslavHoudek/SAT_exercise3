@@ -6,9 +6,65 @@
 
 using board = std::vector<std::vector<int>>;
 
+enum Column {
+	Colour = 0,
+	Pet,
+	Beverage,
+	Cigarettes,
+	Nationality
+};
+
+enum House {
+	House1 = 0,
+	House2,
+	House3,
+	House4,
+	House5
+};
+
+enum Colour {
+	White = 0,
+	Red,
+	Yellow,
+	Blue,
+	Green
+};
+
+enum Pet {
+	Dog = 0,
+	Bird,
+	Cat,
+	Horse,
+	Fish
+};
+
+enum Beverage {
+	Tea = 0,
+	Coffee,
+	Milk,
+	Beer,
+	Water
+};
+
+enum Cigarettes{
+	PallMall = 0,
+	Dunhill,
+	BlueMaster,
+	Blend,
+	Princ
+};
+
+enum Nationality {
+	Brit = 0,
+	Swede,
+	Dane,
+	German,
+	Norwegian
+};
+
 class Solver {
 private:
-    const bool m_write_dimacs = false;
+    const bool m_write_dimacs = true;
     Minisat::Solver solver;
 
 public:
@@ -44,7 +100,25 @@ private:
 	
 	// In addition we need to develop all statements about the arrangement:
 	//
+// Riddle rules
+
+	// - Englishman lives in a red house
 	// void englishman_lives_in_red_house();
+	// - Svede has a dog
+	// - Danish drinks tea
+	// - Green house is left of white house
+	// - Green house’s inhabitant drinks coffee
+	// - Pall Mall smoker has a bird
+	// - Yellow house’s inhabitant smokes Dunhill
+	// - Mid house inhabitant drinks milk
+	// - Norwegian lives in the first house
+    bool NorwegianLivesInTheFirstHouse();
+	// - Blend smoker lives next to cat owner
+	// - Horse owner lives next to Dunhill smoker
+	// - Blue Master smoker drinks beer
+	// - German smokes Prince
+	// - Norwegian lives next to the blue house
+	// - Blend smoker lives next to water drinker
 	// ...
 	
 	// these may be generalized later
