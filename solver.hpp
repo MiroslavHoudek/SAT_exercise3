@@ -117,15 +117,23 @@ private:
 	// - Pall Mall smoker has a bird
     bool PallMallHasBird();
 	// - Yellow house’s inhabitant smokes Dunhill
+    bool YellowSmokesDunhill();
 	// - Mid house inhabitant drinks milk
+    bool MidHouseDrinksMilk();
 	// - Norwegian lives in the first house
     bool NorwegianLivesInTheFirstHouse();
 	// - Blend smoker lives next to cat owner
+    bool BlendSmokerNextToCatOwner();
 	// - Horse owner lives next to Dunhill smoker
+    bool HorseOwnerNextToDunhillSmoker();
 	// - Blue Master smoker drinks beer
+    bool BlueMasterSmokerDrinksBeer();
 	// - German smokes Prince
+    bool GermanSmokesPrince();
 	// - Norwegian lives next to the blue house
+    bool NorwegianNextToBlue();
 	// - Blend smoker lives next to water drinker
-	
+    bool BlendSmokerNextToWaterDrinker();
+
 	// these may be generalized later
 };

@@ -301,6 +301,17 @@ Solver::Solver(bool write_dimacs):
     SwedeHasADog();
     BritLivesInARedGHouse();
     DaneDrinksTea();
+    GreenLeftOfWhite();
+    GreenDrinksCoffee();
+    PallMallHasBird();
+    YellowSmokesDunhill();
+    MidHouseDrinksMilk();
+    BlendSmokerNextToCatOwner();
+    HorseOwnerNextToDunhillSmoker();
+    BlueMasterSmokerDrinksBeer();
+    GermanSmokesPrince();
+    NorwegianNextToBlue();
+    BlendSmokerNextToWaterDrinker();
 }
 
 bool Solver::solve() {
@@ -331,7 +342,7 @@ void Solver::printPretty()
     for (auto const& row : solution) {
         int n = 0;
         for (auto const& col : row) {
-            std::cout << std::setw(10) << getString(n, col) << ' ';
+            std::cout << std::setw(12) << getString(n, col) << ' ';
             // TODO fixme
             n++;
         }
@@ -372,8 +383,7 @@ bool Solver::SwedeHasADog()
 bool Solver::NorwegianLivesInTheFirstHouse()
 {
 	bool ret = true;
-    // In the column of nationalities, constrain nationality of
-    // the inhabitant of the first house to Norwegian
+
     int col = Column::Nationality;
 
     ret &= solver.addClause( Minisat::mkLit(toVar(House::House1, Column::Nationality, Nationality::Norwegian)));
@@ -391,6 +401,131 @@ bool Solver::DaneDrinksTea()
     {
              ret &= solver.addClause(~Minisat::mkLit(toVar(row, Column::Nationality, Nationality::Dane)), Minisat::mkLit(toVar(row, Column::Beverage, Beverage::Tea)));
     }
+
+    std::cout << "ret " << ret << std::endl;
+
+    return ret;
+}
+
+// - Green house is left of white house
+bool Solver::GreenLeftOfWhite() {
+    bool ret = false;
+
+    std::cout << "ret " << ret << std::endl;
+
+    return ret;
+}
+
+// - Green house’s inhabitant drinks coffee
+bool Solver::GreenDrinksCoffee() {
+    bool ret = true;
+
+    for ( int row = House::House1; row <= House::House5; row++ )
+    {
+        ret &= solver.addClause(~Minisat::mkLit(toVar(row, Column::Colour, Colour::Green)), Minisat::mkLit(toVar(row, Column::Beverage, Beverage::Coffee)));
+    }
+
+    std::cout << "ret " << ret << std::endl;
+
+    return ret;}
+
+// - Pall Mall smoker has a bird
+bool Solver::PallMallHasBird() {
+    bool ret = true;
+
+    for ( int row = House::House1; row <= House::House5; row++ )
+    {
+        ret &= solver.addClause(~Minisat::mkLit(toVar(row, Column::Cigarettes, Cigarettes::PallMall)), Minisat::mkLit(toVar(row, Column::Pet, Pet::Bird)));
+    }
+
+    std::cout << "ret " << ret << std::endl;
+
+    return ret;
+}
+
+// - Yellow house’s inhabitant smokes Dunhill
+bool Solver::YellowSmokesDunhill() {
+    bool ret = true;
+
+    for ( int row = House::House1; row <= House::House5; row++ )
+    {
+        ret &= solver.addClause(~Minisat::mkLit(toVar(row, Column::Colour, Colour::Yellow)), Minisat::mkLit(toVar(row, Column::Cigarettes, Cigarettes::Dunhill)));
+    }
+
+    std::cout << "ret " << ret << std::endl;
+
+    return ret;
+}
+
+// - Mid house inhabitant drinks milk
+bool Solver::MidHouseDrinksMilk() {
+    bool ret = true;
+
+    ret &= solver.addClause( Minisat::mkLit(toVar(House::House3, Column::Beverage, Beverage::Milk)));
+
+    std::cout << "ret " << ret << std::endl;
+
+    return ret;
+}
+
+// - Blend smoker lives next to cat owner
+bool Solver::BlendSmokerNextToCatOwner() {
+    bool ret = false;
+
+    std::cout << "ret " << ret << std::endl;
+
+    return ret;
+}
+
+// - Horse owner lives next to Dunhill smoker
+bool Solver::HorseOwnerNextToDunhillSmoker() {
+    bool ret = false;
+
+    std::cout << "ret " << ret << std::endl;
+
+    return ret;
+}
+
+// - Blue Master smoker drinks beer
+bool Solver::BlueMasterSmokerDrinksBeer() {
+    bool ret = true;
+
+    for ( int row = House::House1; row <= House::House5; row++ )
+    {
+        ret &= solver.addClause(~Minisat::mkLit(toVar(row, Column::Cigarettes, Cigarettes::BlueMaster)), Minisat::mkLit(toVar(row, Column::Beverage, Beverage::Beer)));
+    }
+
+    std::cout << "ret " << ret << std::endl;
+
+    return ret;
+}
+
+// - German smokes Prince
+bool Solver::GermanSmokesPrince() {
+    bool ret = true;
+
+    for ( int row = House::House1; row <= House::House5; row++ )
+    {
+        ret &= solver.addClause(~Minisat::mkLit(toVar(row, Column::Nationality,  Nationality::German)), Minisat::mkLit(toVar(row, Column::Cigarettes, Cigarettes::Princ)));
+    }
+
+    std::cout << "ret " << ret << std::endl;
+
+    return ret;
+}
+
+// - Norwegian lives next to the blue house
+bool Solver::NorwegianNextToBlue() {
+    bool ret = false;
+
+    std::cout << "ret " << ret << std::endl;
+
+    return ret;
+}
+
+// - Blend smoker lives next to water drinker
+bool Solver::BlendSmokerNextToWaterDrinker() {
+    bool ret = false;
 
     std::cout << "ret " << ret << std::endl;
 
