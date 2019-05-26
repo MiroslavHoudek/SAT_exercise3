@@ -1,6 +1,7 @@
 #include "solver.hpp"
 
 #include <iostream>
+#include <iomanip>
 
 namespace {
 
@@ -12,7 +13,8 @@ Minisat::Var toVar(int row, int column, int value) {
     assert(row >= 0 && row < rows    && "Attempt to get var for nonexistant row");
     assert(column >= 0 && column < columns && "Attempt to get var for nonexistant column");
     assert(value >= 0 && value < values   && "Attempt to get var for nonexistant value");
-    return row * columns * values + column * values + value;
+    //return row * columns * values + column * values + value;
+    return column * rows * values + row * values + value;
 }
 
 bool is_valid(board const& b) {
@@ -52,6 +54,170 @@ void log_clause(Minisat::Lit lhs, Minisat::Lit rhs) {
     std::clog << "0\n";
 }
 
+std::string getString(int col, int val)
+{
+    if (col == Column::Colour)
+    {
+        switch (val-1) {
+        case Colour::White:
+            return std::string("white");
+            break;
+        case Colour::Red:
+            return std::string("red");
+            break;
+        case Colour::Yellow:
+            return std::string("yellow");
+            break;
+        case Colour::Blue:
+            return std::string("blue");
+            break;
+        case Colour::Green:
+            return std::string("green");
+            break;
+        }
+    }
+    if (col == Column::Colour)
+    {
+        switch (val-1) {
+        case Colour::White:
+            return std::string("white");
+            break;
+        case Colour::Red:
+            return std::string("red");
+            break;
+        case Colour::Yellow:
+            return std::string("yellow");
+            break;
+        case Colour::Blue:
+            return std::string("blue");
+            break;
+        case Colour::Green:
+            return std::string("green");
+            break;
+        }
+    }
+    if (col == Column::Colour)
+    {
+        switch (val-1) {
+        case Colour::White:
+            return std::string("white");
+            break;
+        case Colour::Red:
+            return std::string("red");
+            break;
+        case Colour::Yellow:
+            return std::string("yellow");
+            break;
+        case Colour::Blue:
+            return std::string("blue");
+            break;
+        case Colour::Green:
+            return std::string("green");
+            break;
+        }
+    }
+    if (col == Column::Colour)
+    {
+        switch (val-1) {
+        case Colour::White:
+            return std::string("white");
+            break;
+        case Colour::Red:
+            return std::string("red");
+            break;
+        case Colour::Yellow:
+            return std::string("yellow");
+            break;
+        case Colour::Blue:
+            return std::string("blue");
+            break;
+        case Colour::Green:
+            return std::string("green");
+            break;
+        }
+    }
+    else if (col == Column::Pet)
+    {
+        switch (val-1) {
+        case Pet::Dog:
+            return std::string("dog");
+            break;
+        case Pet::Bird:
+            return std::string("bird");
+            break;
+        case Pet::Cat:
+            return std::string("cat");
+            break;
+        case Pet::Horse:
+            return std::string("horse");
+            break;
+        case Pet::Fish:
+            return std::string("fish");
+            break;
+        }
+    }
+    else if (col == Column::Beverage)
+    {
+        switch (val-1) {
+        case Beverage::Tea:
+            return std::string("tea");
+            break;
+        case Beverage::Coffee:
+            return std::string("coffee");
+            break;
+        case Beverage::Milk:
+            return std::string("milk");
+            break;
+        case Beverage::Beer:
+            return std::string("beer");
+            break;
+        case Beverage::Water:
+            return std::string("water");
+            break;
+        }
+    }
+    else if (col == Column::Cigarettes)
+    {
+        switch (val-1) {
+        case Cigarettes::PallMall:
+            return std::string("pallmall");
+            break;
+        case Cigarettes::Dunhill:
+            return std::string("dunhill");
+            break;
+        case Cigarettes::BlueMaster:
+            return std::string("bluemaster");
+            break;
+        case Cigarettes::Blend:
+            return std::string("blend");
+            break;
+        case Cigarettes::Princ:
+            return std::string("princ");
+            break;
+        }
+    }
+    else if (col == Column::Nationality)
+    {
+        switch (val-1) {
+        case Nationality::Brit:
+            return std::string("brit");
+            break;
+        case Nationality::Swede:
+            return std::string("swede");
+            break;
+        case Nationality::Dane:
+            return std::string("dane");
+            break;
+        case Nationality::German:
+            return std::string("german");
+            break;
+        case Nationality::Norwegian:
+            return std::string("norwegian");
+            break;
+        }
+    }
+    else return std::string("problem");
+}
 
 } //end anonymous namespace
 
@@ -88,8 +254,6 @@ void Solver::exactly_one_true(Minisat::vec<Minisat::Lit> const& literals) {
     }
 }
 
-
-
 void Solver::one_square_one_value() {
     for (int row = 0; row < rows; ++row) {
         for (int column = 0; column < columns; ++column) {
@@ -103,6 +267,16 @@ void Solver::one_square_one_value() {
 }
 
 void Solver::non_duplicated_values() {
+    // In each row, for each value, forbid two column sharing that value
+//    for (int row = 0; row < rows; ++row) {
+//        for (int value = 0; value < values; ++value) {
+//            Minisat::vec<Minisat::Lit> literals;
+//            for (int column = 0; column < columns; ++column) {
+//                literals.push(Minisat::mkLit(toVar(row, column, value)));
+//            }
+//            exactly_one_true(literals);
+//        }
+//    }
     // In each column, for each value, forbid two rows sharing that value
     for (int column = 0; column < columns; ++column) {
         for (int value = 0; value < values; ++value) {
@@ -124,6 +298,9 @@ Solver::Solver(bool write_dimacs):
 
     // Riddle rules application
     NorwegianLivesInTheFirstHouse();
+    SwedeHasADog();
+    BritLivesInARedGHouse();
+    DaneDrinksTea();
 }
 
 bool Solver::solve() {
@@ -148,41 +325,74 @@ board Solver::get_solution() const {
     return b;
 }
 
+void Solver::printPretty()
+{
+    auto solution = get_solution();
+    for (auto const& row : solution) {
+        int n = 0;
+        for (auto const& col : row) {
+            std::cout << std::setw(10) << getString(n, col) << ' ';
+            // TODO fixme
+            n++;
+        }
+        std::cout << '\n';
+    }
+}
+
+
+bool Solver::BritLivesInARedGHouse()
+{
+    bool ret = true;
+
+    for ( int row = House::House1; row <= House::House5; row++ )
+    {
+        ret &= solver.addClause(~Minisat::mkLit(toVar(row, Column::Nationality, Nationality::Brit)), Minisat::mkLit(toVar(row, Column::Colour, Colour::Red)));
+    }
+
+    std::cout << "ret " << ret << std::endl;
+
+    return ret;
+}
+
+
+bool Solver::SwedeHasADog()
+{
+    bool ret = true;
+
+    for ( int row = House::House1; row <= House::House5; row++ )
+    {
+             ret &= solver.addClause(~Minisat::mkLit(toVar(row, Column::Nationality, Nationality::Swede)), Minisat::mkLit(toVar(row, Column::Pet, Pet::Dog)));
+    }
+
+    std::cout << "ret " << ret << std::endl;
+
+    return ret;
+}
+
 bool Solver::NorwegianLivesInTheFirstHouse()
 {
 	bool ret = true;
     // In the column of nationalities, constrain nationality of
-    // the inhabitant of the first house to Norwegian (it's actually
-    // Dane in this commit, because Norwegian ended up evaluated in the
-    // first house even in absence of any rules)
+    // the inhabitant of the first house to Norwegian
     int col = Column::Nationality;
-	
-    for ( int row = House::House1; row <= House::House5; row++ )
-	{
-        for (int val = Nationality::Brit; val <= Nationality::Norwegian; val++)
-        {
-            if (row == House1)
-            {
-                if (val == Dane) {
-                    std::cout << "out " << col << " " << row << " " << val << std::endl;
 
-                    ret &= solver.addClause(Minisat::mkLit(toVar(row, col, val)));
-                }
-                else {
-                    ret &= solver.addClause(~Minisat::mkLit(toVar(row, col, val)));
-                }
-            }
-            else
-            {
-                if (val == Dane)
-                {
-                    ret &= solver.addClause(~Minisat::mkLit(toVar(row, col, val)));
-                }
-            }
-        }
-    }
+    ret &= solver.addClause( Minisat::mkLit(toVar(House::House1, Column::Nationality, Nationality::Norwegian)));
 
-    std::cout << "ret" << ret << std::endl;
+    std::cout << "ret " << ret << std::endl;
 	
 	return ret;
+}
+
+bool Solver::DaneDrinksTea()
+{
+    bool ret = true;
+
+    for ( int row = House::House1; row <= House::House5; row++ )
+    {
+             ret &= solver.addClause(~Minisat::mkLit(toVar(row, Column::Nationality, Nationality::Dane)), Minisat::mkLit(toVar(row, Column::Beverage, Beverage::Tea)));
+    }
+
+    std::cout << "ret " << ret << std::endl;
+
+    return ret;
 }

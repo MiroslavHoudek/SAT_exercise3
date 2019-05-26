@@ -22,6 +22,8 @@ int main() {
                 }
                 std::cout << '\n';
             }
+
+            s.printPretty();
         } else {
             std::clog << "Solving the provided parsed is not possible\n";
         }

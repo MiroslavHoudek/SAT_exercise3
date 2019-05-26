@@ -7,7 +7,7 @@
 using board = std::vector<std::vector<int>>;
 
 enum Column {
-	Colour = 0,
+    Colour = 0,
 	Pet,
 	Beverage,
 	Cigarettes,
@@ -15,7 +15,7 @@ enum Column {
 };
 
 enum House {
-	House1 = 0,
+    House1 = 0,
 	House2,
 	House3,
 	House4,
@@ -23,7 +23,7 @@ enum House {
 };
 
 enum Colour {
-	White = 0,
+    White = 0,
 	Red,
 	Yellow,
 	Blue,
@@ -31,7 +31,7 @@ enum Colour {
 };
 
 enum Pet {
-	Dog = 0,
+    Dog = 0,
 	Bird,
 	Cat,
 	Horse,
@@ -39,7 +39,7 @@ enum Pet {
 };
 
 enum Beverage {
-	Tea = 0,
+    Tea = 0,
 	Coffee,
 	Milk,
 	Beer,
@@ -47,7 +47,7 @@ enum Beverage {
 };
 
 enum Cigarettes{
-	PallMall = 0,
+    PallMall = 0,
 	Dunhill,
 	BlueMaster,
 	Blend,
@@ -55,7 +55,7 @@ enum Cigarettes{
 };
 
 enum Nationality {
-	Brit = 0,
+    Brit = 0,
 	Swede,
 	Dane,
 	German,
@@ -73,6 +73,8 @@ public:
     bool solve();
 
     board get_solution() const;
+
+    void printPretty();
 
 private:
 	// This is going to be adapted from the Sudoku example.
@@ -102,13 +104,18 @@ private:
 	//
 // Riddle rules
 
-	// - Englishman lives in a red house
-	// void englishman_lives_in_red_house();
-	// - Svede has a dog
-	// - Danish drinks tea
+    // - Brit lives in a red house
+    bool BritLivesInARedGHouse();
+    // - Swede has a dog
+    bool SwedeHasADog();
+    // - Dane drinks tea
+    bool DaneDrinksTea();
 	// - Green house is left of white house
+    bool GreenLeftOfWhite();
 	// - Green house’s inhabitant drinks coffee
+    bool GreenDrinksCoffee();
 	// - Pall Mall smoker has a bird
+    bool PallMallHasBird();
 	// - Yellow house’s inhabitant smokes Dunhill
 	// - Mid house inhabitant drinks milk
 	// - Norwegian lives in the first house
@@ -119,7 +126,6 @@ private:
 	// - German smokes Prince
 	// - Norwegian lives next to the blue house
 	// - Blend smoker lives next to water drinker
-	// ...
 	
 	// these may be generalized later
 };
