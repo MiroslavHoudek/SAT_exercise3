@@ -15,13 +15,13 @@ int main() {
             std::chrono::duration<double, std::milli> time_taken = std::chrono::high_resolution_clock::now() - t1;
             std::clog << "Solution found in " << time_taken.count() << " ms\n";
 
-            auto solution = s.get_solution();
-            for (auto const& row : solution) {
-                for (auto const& col : row) {
-                    std::cout << col << ' ';
-                }
-                std::cout << '\n';
-            }
+//            auto solution = s.get_solution();
+//            for (auto const& row : solution) {
+//                for (auto const& col : row) {
+//                    std::cout << col << ' ';
+//                }
+//                std::cout << '\n';
+//            }
 
             s.printPretty();
         } else {
