@@ -279,6 +279,19 @@ void Solver::non_duplicated_values() {
     }
 }
 
+bool Solver::nextTo(int col1, int val1, int col2, int val2)
+{
+    bool ret = true;
+	
+    for ( int row = House::House1; row <= House::House4; row++ )
+    {
+        ret &= solver.addClause(~Minisat::mkLit(toVar(row  , col1,  val1)), Minisat::mkLit(toVar(row+1, col2, val2)));
+        ret &= solver.addClause(~Minisat::mkLit(toVar(row+1, col1,  val1)), Minisat::mkLit(toVar(row  , col2, val2)));
+    }
+
+    return ret;	
+}
+
 Solver::Solver(bool write_dimacs):
     m_write_dimacs(write_dimacs) {
     // Initialize the board
@@ -339,7 +352,6 @@ void Solver::printPretty()
         std::cout << '\n';
     }
 }
-
 
 bool Solver::BritLivesInARedGHouse()
 {
@@ -478,11 +490,7 @@ bool Solver::BlendSmokerNextToCatOwner() {
 
     return ret;
 
-    for ( int row = House::House1; row <= House::House4; row++ )
-    {
-        ret &= solver.addClause(~Minisat::mkLit(toVar(row, Column::Pet,  Pet::Cat)), Minisat::mkLit(toVar(row+1, Column::Cigarettes, Cigarettes::Blend)));
-        ret &= solver.addClause(~Minisat::mkLit(toVar(row+1, Column::Pet,  Pet::Cat)), Minisat::mkLit(toVar(row, Column::Cigarettes, Cigarettes::Blend)));
-    }
+	ret &= nextTo(Column::Pet, Pet::Cat, Column::Cigarettes, Cigarettes::Blend);
 
     std::cout << "ret " << ret << std::endl;
 
@@ -493,11 +501,7 @@ bool Solver::BlendSmokerNextToCatOwner() {
 bool Solver::HorseOwnerNextToDunhillSmoker() {
     bool ret = true;
 
-    for ( int row = House::House1; row <= House::House4; row++ )
-    {
-        ret &= solver.addClause(~Minisat::mkLit(toVar(row, Column::Pet,  Pet::Horse)), Minisat::mkLit(toVar(row+1, Column::Cigarettes, Cigarettes::Dunhill)));
-        ret &= solver.addClause(~Minisat::mkLit(toVar(row+1, Column::Pet,  Pet::Horse)), Minisat::mkLit(toVar(row, Column::Cigarettes, Cigarettes::Dunhill)));
-    }
+	ret &= nextTo(Column::Pet, Pet::Horse, Column::Cigarettes, Cigarettes::Dunhill);
 
     std::cout << "ret " << ret << std::endl;
 
@@ -536,11 +540,7 @@ bool Solver::GermanSmokesPrince() {
 bool Solver::NorwegianNextToBlue() {
     bool ret = true;
 
-    for ( int row = House::House1; row <= House::House4; row++ )
-    {
-        ret &= solver.addClause(~Minisat::mkLit(toVar(row, Column::Nationality,  Nationality::Norwegian)), Minisat::mkLit(toVar(row+1, Column::Colour, Colour::Blue)));
-        ret &= solver.addClause(~Minisat::mkLit(toVar(row+1, Column::Nationality,  Nationality::Norwegian)), Minisat::mkLit(toVar(row, Column::Colour, Colour::Blue)));
-    }
+	ret &= nextTo(Column::Nationality,  Nationality::Norwegian, Column::Colour, Colour::Blue);
 
     std::cout << "ret " << ret << std::endl;
 
@@ -551,11 +551,7 @@ bool Solver::NorwegianNextToBlue() {
 bool Solver::BlendSmokerNextToWaterDrinker() {
     bool ret = true;
 
-    for ( int row = House::House1; row <= House::House4; row++ )
-    {
-        ret &= solver.addClause(~Minisat::mkLit(toVar(row, Column::Cigarettes,  Cigarettes::Blend)), Minisat::mkLit(toVar(row+1, Column::Beverage, Beverage::Water)));
-        ret &= solver.addClause(~Minisat::mkLit(toVar(row+1, Column::Cigarettes,  Cigarettes::Blend)), Minisat::mkLit(toVar(row, Column::Beverage, Beverage::Water)));
-    }
+	ret &= nextTo(Column::Cigarettes,  Cigarettes::Blend, Column::Beverage, Beverage::Water);
 
     std::cout << "ret " << ret << std::endl;
 

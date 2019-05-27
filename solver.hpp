@@ -67,6 +67,7 @@ private:
     const bool m_write_dimacs = true;
     Minisat::Solver solver;
 
+	bool nextTo(int col1, int val1, int col2, int val2);
 public:
     Solver(bool write_dimacs = false);
 
