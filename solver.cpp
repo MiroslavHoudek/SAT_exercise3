@@ -309,12 +309,6 @@ bool Solver::nextTo(int col1, int val1, int col2, int val2)
         lit2.push(Minisat::mkLit(toVar(row+1, col2, val2)));
         lit1.push(Minisat::mkLit(toVar(row+1, col1, val1)));
         lit2.push(Minisat::mkLit(toVar(row  , col2, val2)));
-
-        //ret &= solver.addClause(~Minisat::mkLit(toVar(row  , col1,  val1)), Minisat::mkLit(toVar(row+1, col2, val2)));
-        //ret &= solver.addClause(~Minisat::mkLit(toVar(row+1, col1,  val1)), Minisat::mkLit(toVar(row  , col2, val2)));
-
-        //ret &= solver.addClause( Minisat::mkLit(toVar(row  , col1,  val1)), ~Minisat::mkLit(toVar(row+1, col2, val2)));
-        //ret &= solver.addClause( Minisat::mkLit(toVar(row+1, col1,  val1)), ~Minisat::mkLit(toVar(row  , col2, val2)));
     }
 
     permutate_literals(lit1, lit2);
@@ -334,7 +328,7 @@ Solver::Solver(bool write_dimacs):
     SwedeHasADog();
     BritLivesInARedGHouse();
     DaneDrinksTea();
-    //GreenLeftOfWhite();
+    GreenLeftOfWhite();
     GreenDrinksCoffee();
     PallMallHasBird();
     YellowSmokesDunhill();
@@ -441,17 +435,17 @@ bool Solver::DaneDrinksTea()
 bool Solver::GreenLeftOfWhite() {
     bool ret = true;
 
-    ret &= solver.addClause(~Minisat::mkLit(toVar(House::House5, Column::Colour, Colour::Green)));
+    Minisat::vec<Minisat::Lit> lit1, lit2;
 
     for ( int row = House::House1; row <= House::House4; row++ )
     {
         for (int row_in = row+1; row_in <= House::House5; row_in++) {
-            //std::cout << "rows " << row << " " << row_in << std::endl;
-
-            ret &= solver.addClause(~Minisat::mkLit(toVar(row, Column::Colour, Colour::Green)),
-                                    Minisat::mkLit(toVar(row_in, Column::Colour, Colour::White)));
+            lit1.push(Minisat::mkLit(toVar(row   , Column::Colour, Colour::Green)));
+            lit2.push(Minisat::mkLit(toVar(row_in, Column::Colour, Colour::White)));
         }
     }
+
+    permutate_literals(lit1, lit2);
 
     std::cout << "ret " << ret << std::endl;
 
