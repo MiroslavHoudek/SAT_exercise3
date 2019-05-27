@@ -67,6 +67,7 @@ private:
     const bool m_write_dimacs = true;
     Minisat::Solver solver;
 
+    void permutate_literals(Minisat::vec<Minisat::Lit> const& lit_vec1, Minisat::vec<Minisat::Lit> const& lit_vec2);
 	bool nextTo(int col1, int val1, int col2, int val2);
 public:
     Solver(bool write_dimacs = false);

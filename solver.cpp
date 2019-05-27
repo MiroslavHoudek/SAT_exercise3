@@ -279,18 +279,45 @@ void Solver::non_duplicated_values() {
     }
 }
 
+void Solver::permutate_literals(Minisat::vec<Minisat::Lit> const& lit_vec1, Minisat::vec<Minisat::Lit> const& lit_vec2) {
+    // TODO include m_write_dimacs
+
+    Minisat::vec<Minisat::Lit> litZ;
+
+    for (size_t i=0; i<lit_vec1.size(); i++) {
+        auto var = solver.newVar();
+        litZ.push(Minisat::mkLit(var));
+    }
+
+    solver.addClause(litZ);
+
+    for (size_t i = 0; i < lit_vec1.size(); ++i) {
+        solver.addClause(~litZ[i], lit_vec1[i]);
+        solver.addClause(~litZ[i], lit_vec2[i]);
+    }
+}
+
 bool Solver::nextTo(int col1, int val1, int col2, int val2)
 {
     bool ret = true;
+
+    Minisat::vec<Minisat::Lit> lit1, lit2;
 	
     for ( int row = House::House1; row <= House::House4; row++ )
     {
-        ret &= solver.addClause(~Minisat::mkLit(toVar(row  , col1,  val1)), Minisat::mkLit(toVar(row+1, col2, val2)));
-        ret &= solver.addClause(~Minisat::mkLit(toVar(row+1, col1,  val1)), Minisat::mkLit(toVar(row  , col2, val2)));
+        lit1.push(Minisat::mkLit(toVar(row  , col1, val1)));
+        lit2.push(Minisat::mkLit(toVar(row+1, col2, val2)));
+        lit1.push(Minisat::mkLit(toVar(row+1, col1, val1)));
+        lit2.push(Minisat::mkLit(toVar(row  , col2, val2)));
+
+        //ret &= solver.addClause(~Minisat::mkLit(toVar(row  , col1,  val1)), Minisat::mkLit(toVar(row+1, col2, val2)));
+        //ret &= solver.addClause(~Minisat::mkLit(toVar(row+1, col1,  val1)), Minisat::mkLit(toVar(row  , col2, val2)));
 
         //ret &= solver.addClause( Minisat::mkLit(toVar(row  , col1,  val1)), ~Minisat::mkLit(toVar(row+1, col2, val2)));
         //ret &= solver.addClause( Minisat::mkLit(toVar(row+1, col1,  val1)), ~Minisat::mkLit(toVar(row  , col2, val2)));
     }
+
+    permutate_literals(lit1, lit2);
 
     return ret;	
 }
@@ -317,7 +344,7 @@ Solver::Solver(bool write_dimacs):
     BlueMasterSmokerDrinksBeer();
     GermanSmokesPrince();
     NorwegianNextToBlue();
-    //BlendSmokerNextToWaterDrinker();
+    BlendSmokerNextToWaterDrinker();
 }
 
 bool Solver::solve() {
