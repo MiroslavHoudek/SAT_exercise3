@@ -287,6 +287,9 @@ bool Solver::nextTo(int col1, int val1, int col2, int val2)
     {
         ret &= solver.addClause(~Minisat::mkLit(toVar(row  , col1,  val1)), Minisat::mkLit(toVar(row+1, col2, val2)));
         ret &= solver.addClause(~Minisat::mkLit(toVar(row+1, col1,  val1)), Minisat::mkLit(toVar(row  , col2, val2)));
+
+        //ret &= solver.addClause( Minisat::mkLit(toVar(row  , col1,  val1)), ~Minisat::mkLit(toVar(row+1, col2, val2)));
+        //ret &= solver.addClause( Minisat::mkLit(toVar(row+1, col1,  val1)), ~Minisat::mkLit(toVar(row  , col2, val2)));
     }
 
     return ret;	
@@ -310,11 +313,11 @@ Solver::Solver(bool write_dimacs):
     YellowSmokesDunhill();
     MidHouseDrinksMilk();
     BlendSmokerNextToCatOwner();
-    //HorseOwnerNextToDunhillSmoker();
+    HorseOwnerNextToDunhillSmoker();
     BlueMasterSmokerDrinksBeer();
     GermanSmokesPrince();
     NorwegianNextToBlue();
-    BlendSmokerNextToWaterDrinker();
+    //BlendSmokerNextToWaterDrinker();
 }
 
 bool Solver::solve() {
@@ -386,8 +389,6 @@ bool Solver::NorwegianLivesInTheFirstHouse()
 {
 	bool ret = true;
 
-    int col = Column::Nationality;
-
     ret &= solver.addClause( Minisat::mkLit(toVar(House::House1, Column::Nationality, Nationality::Norwegian)));
 
     std::cout << "ret " << ret << std::endl;
@@ -412,8 +413,6 @@ bool Solver::DaneDrinksTea()
 // - Green house is left of white house
 bool Solver::GreenLeftOfWhite() {
     bool ret = true;
-
-//    return ret;
 
     ret &= solver.addClause(~Minisat::mkLit(toVar(House::House5, Column::Colour, Colour::Green)));
 
@@ -487,8 +486,6 @@ bool Solver::MidHouseDrinksMilk() {
 // - Blend smoker lives next to cat owner
 bool Solver::BlendSmokerNextToCatOwner() {
     bool ret = true;
-
-    return ret;
 
 	ret &= nextTo(Column::Pet, Pet::Cat, Column::Cigarettes, Cigarettes::Blend);
 
