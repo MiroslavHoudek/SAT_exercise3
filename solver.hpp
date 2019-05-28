@@ -67,8 +67,9 @@ private:
     const bool m_write_dimacs = true;
     Minisat::Solver solver;
 
-    void permutate_literals(Minisat::vec<Minisat::Lit> const& lit_vec1, Minisat::vec<Minisat::Lit> const& lit_vec2);
+    bool transform_to_cnf(Minisat::vec<Minisat::Lit> const& lit_vec1, Minisat::vec<Minisat::Lit> const& lit_vec2);
 	bool nextTo(int col1, int val1, int col2, int val2);
+	bool setColValToColVal(int col1, int val1, int col2, int val2);
 public:
     Solver(bool write_dimacs = false);
 
@@ -91,21 +92,8 @@ private:
     void non_duplicated_values();
     void exactly_one_true(Minisat::vec<Minisat::Lit> const& literals);
 	
-	// ... but I may need another one which ensures that values for each
-	// quality are going to be constrained to their respective columns. In
-	// some way it may be unnecessary, because if we conceptually assign  
-	// numerical values 1-5 to five options for each column, it may not matter
-	// what they represent, as long as they obey the constraints.
-    // void house_colours_in_house_column();
-	// void pets_in_pet_column();
-	// void nationality_in_nationality_column();
-	// void cigarettes_in_cigarettes_column();
-	// void beverages_in_beverage_column();
-	
-	// In addition we need to develop all statements about the arrangement:
-	//
-// Riddle rules
 
+	// Riddle rules
     // - Brit lives in a red house
     bool BritLivesInARedGHouse();
     // - Swede has a dog
@@ -137,5 +125,4 @@ private:
 	// - Blend smoker lives next to water drinker
     bool BlendSmokerNextToWaterDrinker();
 
-	// these may be generalized later
 };
